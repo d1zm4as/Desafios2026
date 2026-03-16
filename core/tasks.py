@@ -23,5 +23,5 @@ def cleanup_expired_locks() -> int:
 
 @shared_task
 def send_ticket_confirmation_email(user_id: int, ticket_code: str) -> None:
-    # Placeholder for email integration.
+    # Placeholder para integração de email.
     return None
