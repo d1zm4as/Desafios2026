@@ -60,7 +60,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          poetry install
+          poetry install --no-root
 
       - name: Run migrations
         run: |
