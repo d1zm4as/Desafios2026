@@ -47,18 +47,21 @@ curl http://localhost:8000/api/movies/
 - Swagger: `/api/docs/`
 - Redoc: `/api/redoc/`
 
+## Frontend básico
+Arquivos em `frontend/`. Abra `frontend/index.html` no navegador e informe a Base URL se necessário.
+
 ## Base URL (produção)
-`https://desafiobackend-production.up.railway.app`
+`https://desafiobackend2026-production.up.railway.app`
 
 ## Endpoints completos (produção)
-- `POST https://desafiobackend-production.up.railway.app/api/auth/register/`
-- `POST https://desafiobackend-production.up.railway.app/api/auth/token/`
-- `POST https://desafiobackend-production.up.railway.app/api/auth/token/refresh/`
-- `GET https://desafiobackend-production.up.railway.app/api/movies/`
-- `GET https://desafiobackend-production.up.railway.app/api/movies/{movie_id}/sessions/`
-- `GET https://desafiobackend-production.up.railway.app/api/sessions/{session_id}/seats/`
-- `POST https://desafiobackend-production.up.railway.app/api/sessions/{session_id}/reserve/`
-- `POST https://desafiobackend-production.up.railway.app/api/sessions/{session_id}/checkout/`
-- `GET https://desafiobackend-production.up.railway.app/api/me/tickets/`
-- `GET https://desafiobackend-production.up.railway.app/api/docs/`
-- `GET https://desafiobackend-production.up.railway.app/api/redoc/`
+- `POST https://desafiobackend2026-production.up.railway.app/api/auth/register/`
+- `POST https://desafiobackend2026-production.up.railway.app/api/auth/token/`
+- `POST https://desafiobackend2026-production.up.railway.app/api/auth/token/refresh/`
+- `GET https://desafiobackend2026-production.up.railway.app/api/movies/`
+- `GET https://desafiobackend2026-production.up.railway.app/api/movies/{movie_id}/sessions/`
+- `GET https://desafiobackend2026-production.up.railway.app/api/sessions/{session_id}/seats/`
+- `POST https://desafiobackend2026-production.up.railway.app/api/sessions/{session_id}/reserve/`
+- `POST https://desafiobackend2026-production.up.railway.app/api/sessions/{session_id}/checkout/`
+- `GET https://desafiobackend2026-production.up.railway.app/api/me/tickets/`
+- `GET https://desafiobackend2026-production.up.railway.app/api/docs/`
+- `GET https://desafiobackend2026-production.up.railway.app/api/redoc/`

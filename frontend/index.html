@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cinepolis Natal - Frontend Básico</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">Cinepolis Natal</p>
+        <h1>Ingressos, sessões e assentos em um clique</h1>
+        <p class="sub">Frontend básico para testar a API pública.</p>
+      </div>
+    </div>
+
+    <main class="shell">
+      <section class="card">
+        <h2>Configuração</h2>
+        <div class="grid">
+          <label>
+            Base URL
+            <input id="baseUrl" type="text" value="https://desafiobackend2026-production.up.railway.app" />
+          </label>
+          <label>
+            JWT (access)
+            <input id="jwtToken" type="text" placeholder="Cole aqui o token" />
+          </label>
+          <div class="actions">
+            <button id="saveConfig">Salvar</button>
+            <button id="clearConfig" class="ghost">Limpar</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Cadastro</h2>
+        <div class="grid">
+          <label>Email <input id="regEmail" type="email" placeholder="user@email.com" /></label>
+          <label>Usuário <input id="regUsername" type="text" placeholder="usuario" /></label>
+          <label>Senha <input id="regPassword" type="password" placeholder="senha123" /></label>
+          <div class="actions">
+            <button id="registerBtn">Cadastrar</button>
+          </div>
+        </div>
+        <pre id="registerOut" class="output"></pre>
+      </section>
+
+      <section class="card">
+        <h2>Login</h2>
+        <div class="grid">
+          <label>Usuário <input id="loginUsername" type="text" placeholder="usuario" /></label>
+          <label>Senha <input id="loginPassword" type="password" placeholder="senha123" /></label>
+          <div class="actions">
+            <button id="loginBtn">Entrar</button>
+          </div>
+        </div>
+        <pre id="loginOut" class="output"></pre>
+      </section>
+
+      <section class="card">
+        <h2>Filmes</h2>
+        <div class="actions">
+          <button id="loadMovies">Carregar filmes</button>
+        </div>
+        <div id="movies" class="list"></div>
+      </section>
+
+      <section class="card">
+        <h2>Sessões</h2>
+        <div class="grid">
+          <label>Movie ID <input id="movieId" type="number" placeholder="ID do filme" /></label>
+          <div class="actions">
+            <button id="loadSessions">Carregar sessões</button>
+          </div>
+        </div>
+        <div id="sessions" class="list"></div>
+      </section>
+
+      <section class="card">
+        <h2>Mapa de assentos</h2>
+        <div class="grid">
+          <label>Session ID <input id="sessionId" type="number" placeholder="ID da sessão" /></label>
+          <div class="actions">
+            <button id="loadSeats">Carregar assentos</button>
+          </div>
+        </div>
+        <div id="seats" class="seats"></div>
+      </section>
+
+      <section class="card">
+        <h2>Reserva e Checkout</h2>
+        <div class="grid">
+          <label>Session ID <input id="actionSessionId" type="number" placeholder="ID da sessão" /></label>
+          <label>Seat ID <input id="actionSeatId" type="number" placeholder="ID do assento" /></label>
+          <div class="actions">
+            <button id="reserveBtn">Reservar</button>
+            <button id="checkoutBtn" class="accent">Checkout</button>
+          </div>
+        </div>
+        <pre id="actionOut" class="output"></pre>
+      </section>
+
+      <section class="card">
+        <h2>Meus ingressos</h2>
+        <div class="actions">
+          <button id="loadTickets">Carregar ingressos</button>
+        </div>
+        <div id="tickets" class="list"></div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
