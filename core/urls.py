@@ -5,6 +5,8 @@ from core import views
 
 
 urlpatterns = [
+    path('', views.frontend_index, name='frontend-index'),
+    path('frontend/<str:filename>/', views.frontend_asset, name='frontend-asset'),
     path('auth/register/', views.RegisterView.as_view(), name='register'),
     path('auth/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

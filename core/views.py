@@ -1,4 +1,6 @@
 from django.core.cache import cache
+from django.http import FileResponse, Http404
+from django.conf import settings
 from django.utils import timezone
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
@@ -146,3 +148,22 @@ class MyTicketsView(generics.ListAPIView):
         elif status_param == 'past':
             queryset = queryset.filter(session_seat__session__starts_at__lt=now)
         return queryset
+
+
+def frontend_index(request):
+    file_path = settings.BASE_DIR / 'frontend' / 'index.html'
+    if not file_path.exists():
+        raise Http404('Frontend not found.')
+    return FileResponse(open(file_path, 'rb'), content_type='text/html')
+
+
+def frontend_asset(request, filename: str):
+    file_path = settings.BASE_DIR / 'frontend' / filename
+    if not file_path.exists():
+        raise Http404('Asset not found.')
+    content_type = 'text/plain'
+    if filename.endswith('.css'):
+        content_type = 'text/css'
+    elif filename.endswith('.js'):
+        content_type = 'application/javascript'
+    return FileResponse(open(file_path, 'rb'), content_type=content_type)

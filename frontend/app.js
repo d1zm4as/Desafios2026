@@ -1,7 +1,7 @@
 const qs = (id) => document.getElementById(id);
 
 const state = {
-  baseUrl: localStorage.getItem('baseUrl') || 'https://desafiobackend2026-production.up.railway.app',
+  baseUrl: localStorage.getItem('baseUrl') || window.location.origin,
   token: localStorage.getItem('jwtToken') || '',
 };
 

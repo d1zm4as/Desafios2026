@@ -48,8 +48,8 @@ curl http://localhost:8000/api/movies/
 - Redoc: `/api/redoc/`
 
 ## Frontend básico
-Arquivos em `frontend/`. Abra `frontend/index.html` no navegador e informe a Base URL se necessário.
-O backend já está com CORS liberado para facilitar testes locais no navegador.
+Frontend servido pelo próprio backend. Acesse a raiz do domínio e o app abre automaticamente.
+Se quiser testar localmente, ainda pode abrir `frontend/index.html`.
 
 ## Testes rápidos (frontend)
 1. Abra `frontend/index.html`
