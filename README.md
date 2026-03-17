@@ -49,6 +49,7 @@ curl http://localhost:8000/api/movies/
 
 ## Frontend básico
 Arquivos em `frontend/`. Abra `frontend/index.html` no navegador e informe a Base URL se necessário.
+O backend já está com CORS liberado para facilitar testes locais no navegador.
 
 ## Testes rápidos (frontend)
 1. Abra `frontend/index.html`
