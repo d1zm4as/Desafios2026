@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 import os
+from urllib.parse import urlparse
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -80,8 +81,19 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
+def _build_db_config():
+    database_url = os.getenv('DATABASE_URL')
+    if database_url:
+        parsed = urlparse(database_url)
+        return {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': parsed.path.lstrip('/'),
+            'USER': parsed.username,
+            'PASSWORD': parsed.password,
+            'HOST': parsed.hostname,
+            'PORT': str(parsed.port or '5432'),
+        }
+    return {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': os.getenv('POSTGRES_DB', 'cinepolis'),
         'USER': os.getenv('POSTGRES_USER', 'postgres'),
@@ -89,7 +101,9 @@ DATABASES = {
         'HOST': os.getenv('POSTGRES_HOST', 'db'),
         'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
-}
+
+
+DATABASES = {'default': _build_db_config()}
 
 
 # Password validation
