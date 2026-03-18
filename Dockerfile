@@ -19,4 +19,4 @@ COPY . /app/
 
 EXPOSE 8000
 
-CMD ["/bin/sh", "-c", "set -e; echo \"PORT=${PORT}\"; python manage.py migrate --noinput; exec gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --access-logfile - --error-logfile - --log-level info"]
+CMD ["/bin/sh", "-c", "set -e; echo \"PORT=${PORT}\"; python manage.py migrate --noinput; python manage.py seed_movies --if-empty; exec gunicorn config.wsgi:application --bind 0.0.0.0:${PORT:-8000} --access-logfile - --error-logfile - --log-level info"]
