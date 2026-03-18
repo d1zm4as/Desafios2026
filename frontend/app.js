@@ -66,7 +66,8 @@ const clearConfig = () => {
 
 const api = async (path, options = {}) => {
   const headers = { ...(options.headers || {}) };
-  if (state.token) {
+  const useAuth = options.auth !== false;
+  if (useAuth && state.token) {
     headers.Authorization = `Bearer ${state.token}`;
   }
   try {
@@ -224,7 +225,7 @@ const renderTickets = (tickets) => {
 const loadMovies = async () => {
   saveConfig();
   setStatus('Carregando filmes...');
-  const result = await api('/api/movies/');
+  const result = await api('/api/movies/', { auth: false });
   logApi(result);
   if (!result.ok) {
     setStatus('Falha ao carregar filmes', 'error');
@@ -241,7 +242,7 @@ const loadSessions = async () => {
     return;
   }
   setStatus('Carregando sessoes...');
-  const result = await api(`/api/movies/${state.selectedMovie.id}/sessions/`);
+  const result = await api(`/api/movies/${state.selectedMovie.id}/sessions/`, { auth: false });
   logApi(result);
   if (!result.ok) {
     setStatus('Falha ao carregar sessoes', 'error');
@@ -258,7 +259,7 @@ const loadSeats = async () => {
     return;
   }
   setStatus('Carregando assentos...');
-  const result = await api(`/api/sessions/${state.selectedSession.id}/seats/`);
+  const result = await api(`/api/sessions/${state.selectedSession.id}/seats/`, { auth: false });
   logApi(result);
   if (!result.ok) {
     setStatus('Falha ao carregar assentos', 'error');
@@ -342,10 +343,11 @@ const loadTickets = async () => {
 const testApi = async () => {
   saveConfig();
   setStatus('Testando conexao...');
-  const result = await api('/api/movies/');
+  const result = await api('/api/movies/', { auth: false });
   logApi(result);
   if (!result.ok) {
-    setStatus('API indisponivel', 'error');
+    const detail = result.data?.detail || result.data?.error || result.data?.message;
+    setStatus(`API indisponivel (${result.status})${detail ? `: ${detail}` : ''}`, 'error');
     return;
   }
   setStatus('API ok');
