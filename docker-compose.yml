@@ -17,7 +17,7 @@ services:
 
   web:
     build: .
-    command: /bin/sh -c "python manage.py migrate --noinput && python manage.py seed_movies --if-empty && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+    command: /bin/sh -c "python manage.py migrate --noinput && python manage.py seed_movies --if-empty --ensure-seats && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/app
     ports:
