@@ -98,16 +98,21 @@ Frontend servido pelo próprio backend. Acesse:
 Se quiser testar localmente, ainda pode abrir `frontend/index.html`.
 
 ## Testes rápidos (frontend)
-1. Abra `frontend/index.html`
-2. Use Base URL: `https://desafiobackend2026-production.up.railway.app`
-3. Fluxo sugerido:
-   - Cadastro
-   - Login (pegar token)
-   - Carregar filmes
-   - Carregar sessões
-   - Carregar assentos
-   - Reservar / Checkout
-   - Meus ingressos
+1. Abra o frontend (Railway ou `frontend/index.html`).
+2. Clique **Limpar** na seção de Configuracao.
+3. Base URL: `https://desafiobackend2026-production.up.railway.app` (sem barra no final).
+4. Clique **Salvar** e depois **Testar conexao**.
+5. Cadastre um usuario e faça login.
+6. Clique **Carregar filmes** e escolha um filme.
+7. Selecione uma sessao, escolha um assento disponivel, **Reservar** e **Checkout**.
+8. Clique **Carregar ingressos** em Meus ingressos.
+
+## Seed automatico
+No startup, o app executa:
+- `python manage.py migrate --noinput`
+- `python manage.py seed_movies --if-empty --ensure-seats`
+
+Isso cria filmes, sessoes e assentos apenas quando o banco esta vazio. Se o banco ja tiver dados, o comando apenas garante assentos para sessoes sem assentos.
 
 ## Testes rápidos (curl)
 ```bash
