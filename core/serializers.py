@@ -8,6 +8,7 @@ User = get_user_model()
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(required=True)
     password = serializers.CharField(write_only=True, min_length=6)
 
     class Meta:
@@ -20,6 +21,12 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=validated_data['username'],
             password=validated_data['password'],
         )
+
+    def validate_email(self, value: str) -> str:
+        email = value.strip()
+        if User.objects.filter(email__iexact=email).exists():
+            raise serializers.ValidationError('Email already registered.')
+        return email
 
 
 class MovieSerializer(serializers.ModelSerializer):

@@ -46,6 +46,16 @@ class AuthTests(TestCase):
         self.assertEqual(token_response.status_code, 200)
         self.assertIn('access', token_response.data)
 
+    def test_register_rejects_duplicate_email(self):
+        first = {'email': 'user@example.com', 'username': 'user1', 'password': 'testpass123'}
+        second = {'email': 'USER@example.com', 'username': 'user2', 'password': 'testpass123'}
+        response_1 = self.client.post('/api/auth/register/', first, format='json')
+        self.assertEqual(response_1.status_code, 201)
+
+        response_2 = self.client.post('/api/auth/register/', second, format='json')
+        self.assertEqual(response_2.status_code, 400)
+        self.assertIn('email', response_2.data)
+
 
 class TicketFlowTests(TestCase):
     def setUp(self) -> None:
@@ -155,6 +165,10 @@ class PaginationTests(TestCase):
         self.assertEqual(response.data['count'], 25)
         self.assertEqual(len(response.data['results']), 20)
         self.assertIsNotNone(response.data['next'])
+
+    def test_sessions_movie_not_found_returns_404(self):
+        response = self.client.get('/api/movies/999/sessions/')
+        self.assertEqual(response.status_code, 404)
 
     def test_my_tickets_are_paginated(self):
         client = _auth_client('buyer', 'buyer@example.com', 'pass12345')

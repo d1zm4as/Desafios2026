@@ -1,4 +1,5 @@
 from django.core.cache import cache
+from django.db import IntegrityError, transaction
 from django.http import FileResponse, Http404, HttpResponse
 from django.conf import settings
 from django.utils import timezone
@@ -51,6 +52,7 @@ class SessionListView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
+        generics.get_object_or_404(Movie, pk=self.kwargs['movie_id'])
         return Session.objects.filter(movie_id=self.kwargs['movie_id'])
 
     def list(self, request, *args, **kwargs):
@@ -117,20 +119,33 @@ class CheckoutView(APIView):
         serializer.is_valid(raise_exception=True)
         seat_id = serializer.validated_data['seat_id']
 
-        seat = generics.get_object_or_404(SessionSeat, pk=seat_id, session_id=session_id)
-
-        if Ticket.objects.filter(session_seat=seat).exists():
-            return Response({'detail': 'Seat already purchased.'}, status=status.HTTP_409_CONFLICT)
-
-        if is_locked_by_other(request.user.id, session_id, seat.id):
+        if is_locked_by_other(request.user.id, session_id, seat_id):
             return Response({'detail': 'Seat is reserved by another user.'}, status=status.HTTP_409_CONFLICT)
 
-        if not is_locked_by_user(request.user.id, session_id, seat.id):
+        if not is_locked_by_user(request.user.id, session_id, seat_id):
             return Response({'detail': 'Seat is not reserved.'}, status=status.HTTP_409_CONFLICT)
 
-        ticket = Ticket.objects.create(user=request.user, session_seat=seat)
-        release_lock(request.user.id, session_id, seat.id)
-        send_ticket_confirmation_email.delay(request.user.id, str(ticket.code))
+        try:
+            with transaction.atomic():
+                seat = (
+                    SessionSeat.objects.select_for_update()
+                    .select_related('session')
+                    .get(pk=seat_id, session_id=session_id)
+                )
+                if Ticket.objects.filter(session_seat=seat).exists():
+                    raise IntegrityError('Seat already purchased.')
+                ticket = Ticket.objects.create(user=request.user, session_seat=seat)
+                transaction.on_commit(
+                    lambda: send_ticket_confirmation_email.delay(request.user.id, str(ticket.code))
+                )
+        except SessionSeat.DoesNotExist:
+            release_lock(request.user.id, session_id, seat_id)
+            return Response({'detail': 'Seat not found.'}, status=status.HTTP_404_NOT_FOUND)
+        except IntegrityError:
+            release_lock(request.user.id, session_id, seat_id)
+            return Response({'detail': 'Seat already purchased.'}, status=status.HTTP_409_CONFLICT)
+
+        release_lock(request.user.id, session_id, seat_id)
         serializer = TicketSerializer(ticket)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 

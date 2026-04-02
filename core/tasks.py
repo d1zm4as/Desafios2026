@@ -1,10 +1,15 @@
+import logging
 import time
 
 from celery import shared_task
+from django.contrib.auth import get_user_model
 from django.conf import settings
+from django.core.mail import send_mail
 from redis import Redis
 
 from core.locks import LOCK_INDEX_KEY
+
+logger = logging.getLogger(__name__)
 
 
 @shared_task
@@ -23,5 +28,14 @@ def cleanup_expired_locks() -> int:
 
 @shared_task
 def send_ticket_confirmation_email(user_id: int, ticket_code: str) -> None:
-    # Placeholder para integração de email.
+    User = get_user_model()
+    user = User.objects.filter(id=user_id).first()
+    if not user or not user.email:
+        logger.warning('Ticket email skipped for user_id=%s (missing user/email).', user_id)
+        return None
+
+    subject = 'Ticket confirmation'
+    message = f'Your booking is confirmed. Ticket code: {ticket_code}.'
+    from_email = getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'no-reply@cinepolis.local'
+    send_mail(subject, message, from_email, [user.email], fail_silently=False)
     return None
